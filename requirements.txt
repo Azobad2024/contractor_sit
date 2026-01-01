@@ -4,3 +4,5 @@ Pillow
 whitenoise
 psycopg2-binary
 django-compressor
+dj-database-url
+python-dotenv
