@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Contractor Portfolio Website
 
 A production-ready, mobile-first Django website for a contractor, featuring a services showcase, project portfolio with image sliders, and contact form. Supports RTL (Arabic) and Dark Mode out of the box.
@@ -77,3 +78,6 @@ Access the admin panel at `/admin/` to add projects and services.
 4. **Nginx**:
    Configure Nginx to proxy pass to port 8000 and serve static/media files.
 
+=======
+# contractor_sit
+>>>>>>> cb2f00b2f1e59c066d4a45a8d00764ad11e82e86
