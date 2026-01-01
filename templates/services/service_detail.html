@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-20">
+    <div class="container mx-auto px-4">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3 space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'home' %}"
+                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-cyan-600 dark:text-gray-400 dark:hover:text-white">
+                        <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        الرئيسية
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400 transform rotate-180" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="mr-1 text-sm font-medium text-gray-500 md:mr-2 dark:text-gray-400">الخدمات</span>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400 transform rotate-180" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="mr-1 text-sm font-medium text-gray-500 md:mr-2 dark:text-gray-400">{{ service.title
+                            }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden">
+            <!-- Header Section -->
+            <div class="relative h-[400px] md:h-[500px]">
+                {% if service.icon %}
+                <img src="{{ service.icon.url }}" class="w-full h-full object-cover" alt="{{ service.title }}">
+                {% else %}
+                <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                    <span class="text-4xl text-gray-400">لا توجد صورة</span>
+                </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+                <div class="absolute bottom-0 right-0 p-8 md:p-12 text-white">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ service.title }}</h1>
+                    <a href="{% url 'home' %}#contact"
+                        onclick="sessionStorage.setItem('requestedService', '{{ service.title }}')"
+                        class="inline-block px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-full transition transform hover:-translate-y-1 shadow-lg mt-4">
+                        اطلب هذه الخدمة
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Description -->
+                <div class="lg:col-span-2 space-y-8">
+                    <div
+                        class="prose dark:prose-invert max-w-none text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+                        {{ service.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="lg:col-span-1">
+                    <h3
+                        class="text-2xl font-bold mb-6 text-gray-900 dark:text-white border-b-2 border-cyan-500 pb-2 inline-block">
+                        معرض الصور</h3>
+
+                    {% if service.images.all %}
+                    <div class="grid grid-cols-2 gap-4" x-data="{ activeImg: null }">
+                        {% for img in service.images.all %}
+                        <div class="relative aspect-square cursor-pointer overflow-hidden rounded-xl group"
+                            @click="activeImg = '{{ img.image.url }}'; document.body.style.overflow = 'hidden'">
+                            <img src="{{ img.image.url }}"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500"
+                                alt="Gallery">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Lightbox Modal -->
+                        <div x-show="activeImg"
+                            class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" x-cloak
+                            @click="activeImg = null; document.body.style.overflow = 'auto'">
+
+                            <img :src="activeImg" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                @click.stop>
+                            <button class="absolute top-4 right-4 text-white hover:text-cyan-400 transition"
+                                @click="activeImg = null; document.body.style.overflow = 'auto'">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500 italic">لا توجد صور إضافية لهذه الخدمة.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

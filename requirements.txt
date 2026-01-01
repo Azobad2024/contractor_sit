@@ -1,0 +1,6 @@
+Django>=4.2,<5.0
+djangorestframework
+Pillow
+whitenoise
+psycopg2-binary
+django-compressor
