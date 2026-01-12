@@ -7,6 +7,7 @@ Production settings for contractor_site
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+load_dotenv()
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,26 +76,55 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'contractor_site.wsgi.application'
+DB_LIVE = os.getenv('DB_LIVE')
 
-# -----------------------------------------------------------------------------
-# Database
-# -----------------------------------------------------------------------------
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', 600)),
-            ssl_require=os.getenv('DB_SSL_REQUIRE', 'True').lower() in ('true','1','yes')
-        )
-    }
-else:
+if DB_LIVE in ['False', False]:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
+        }
+    }
+# -----------------------------------------------------------------------------
+# Database
+# -----------------------------------------------------------------------------
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST'),
+#         'PORT': os.getenv('DB_PORT'),
+#     }
+# }
+# DATABASE_URL = os.getenv('DATABASE_URL')
+# if DATABASE_URL:
+#     DATABASES = {
+#         'default': dj_database_url.parse(
+#             DATABASE_URL,
+#             conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', 600)),
+#             ssl_require=os.getenv('DB_SSL_REQUIRE', 'True').lower() in ('true','1','yes')
+#         )
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 # POSTGRES_LOCALY = True
 # if ENVIRONMENT == 'production' or POSTGRES_LOCALY == True:
