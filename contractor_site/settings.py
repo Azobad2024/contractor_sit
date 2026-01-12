@@ -19,8 +19,8 @@ if (BASE_DIR / '.env').exists():
 # -----------------------------------------------------------------------------
 # Basic / Security
 # -----------------------------------------------------------------------------
-SECRET_KEY = os.getenv('SECRET_KEY', 'change-me-in-prod')   # ضع قيمة قوية في الإنتاج
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me-in-prod')   # ضع قيمة قوية في الإنتاج
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = ['*']
 
@@ -76,7 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'contractor_site.wsgi.application'
-DB_LIVE = os.getenv('DB_LIVE')
+DB_LIVE = os.environ.get('DB_LIVE')
 
 if DB_LIVE in ['False', False]:
     DATABASES = {
@@ -89,11 +89,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT'),
         }
     }
 # -----------------------------------------------------------------------------
