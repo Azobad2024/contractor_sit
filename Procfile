@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn contractor_site.wsgi
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn contractor_site.wsgi --bind 0.0.0.0:$PORT --workers 3 --log-file -
