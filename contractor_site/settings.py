@@ -22,7 +22,7 @@ if (BASE_DIR / '.env').exists():
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-me-in-prod')   # ضع قيمة قوية في الإنتاج
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+ALLOWED_HOSTS = ['*']
 
 # Proxy header (for PaaS behind load balancer)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
